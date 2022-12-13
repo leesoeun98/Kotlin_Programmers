@@ -1,0 +1,23 @@
+// 21분 소요, 다른 사람 로직 참고 (2회차 성공)
+// 1회차 실패 - 시간 초과 (일단 for문은 무조건 1번만 해야 함 + indexOf 이런거 쓰면 안 됨) -> HashSet
+import java.io.*
+val br = BufferedReader(InputStreamReader(System.`in`))
+val bw = BufferedWriter(OutputStreamWriter(System.out))
+
+fun main(){
+    val n = br.readLine()!!.toLong()
+    val xList = br.readLine()!!.split(' ').map{it.toLong()}.toList()
+    val xSorted = xList.toSortedSet().toList()
+    val xMap = mutableMapOf<Long, Long>()
+
+    for(i in xSorted.indices){
+        if(!xMap.keys.contains(xSorted[i])) xMap[xSorted[i]] = i.toLong()
+    }
+
+    for(i in xList.indices){
+        if(i!=xList.size-1) bw.write("${xMap[xList[i]]} ") else bw.write("${xMap[xList[i]]}")
+    }
+
+    bw.flush()
+    bw.close()
+}
