@@ -1,0 +1,37 @@
+// 2시간 20분 소요, 다른 사람 풀이 봄
+// 분할정복 맞음 + 허나 2^15이므로 Long이고 당연히 다 탐색하거나 저장하면 안 됨
+// 필요한 부분만 탐색하고 아니면 제곱 수 더하는 식으로 구현하기
+
+import java.io.*
+val br = BufferedReader(InputStreamReader(System.`in`))
+var num=0L
+var answer = 0L
+
+fun main(){
+    val (n, r, c) = br.readLine()!!.split(' ').map{it.toLong()}
+    var s = 1L
+    for(i in 0 until n){
+        s*=2
+    }
+    getZ(0,0,s, r, c)
+    println(answer)
+}
+
+// i, j는 현재 좌표 + r, c가 목표 좌표
+fun getZ(i:Long, j:Long, n:Long, r:Long, c:Long){
+    // 목표 좌표 도달하면 더이상 탐색 안하고 바로 종료
+    if(i==r && j==c){
+        answer = num
+        return
+    }
+    // 목표 좌표가 범위안에 있으면 탐색, 아니면 그냥 제곱해서 더해줌
+    if(i<=r&&r<i+n && j<=c && c<j+n){
+        getZ(i,j, n/2, r, c)
+        getZ(i,j+n/2, n/2, r, c)
+        getZ(i+n/2,j, n/2, r, c)
+        getZ(i+n/2,j+n/2, n/2, r, c)
+    }
+    else{
+        num+=n*n
+    }
+}

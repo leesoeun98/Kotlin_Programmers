@@ -1,0 +1,44 @@
+// 43분 소요, 혼자 풂 (1회차 성공)
+// 플로이드 와샬, bfs 문제 (depth를 저장하는 방식에서 헤맴)
+import java.io.*
+import java.util.LinkedList
+import java.util.Queue
+
+val br = BufferedReader(InputStreamReader(System.`in`))
+val map = mutableMapOf<Int, MutableList<Int>>()
+val friendMap = mutableMapOf<Int, Int>()
+
+fun main(){
+    val (n, m) = br.readLine()!!.split(' ').map{it.toInt()}
+    for(i in 0 until m){
+        val (start, end) = br.readLine()!!.split(' ').map{it.toInt()}
+        if(!map.keys.contains(start)) map[start]= mutableListOf()
+        if(!map.keys.contains(end)) map[end]= mutableListOf()
+        map[start]!!.add(end)
+        map[end]!!.add(start)
+    }
+
+    (0 until n).map{friendMap[it+1] =0}
+
+    for(i in 1 until n+1){
+        val isVisited = mutableListOf<Int>()
+        val queue: Queue<MutableList<Int>> = LinkedList()
+
+        queue.add(mutableListOf(i, 0))
+        isVisited.add(i)
+
+        while(queue.isNotEmpty()){
+            val cur = queue.poll()
+            friendMap[i] = friendMap[i]!! + cur[1]
+            if(map[cur[0]]!=null){
+                for(next in map[cur[0]]!!){
+                    if(!isVisited.contains(next)){
+                        isVisited.add(next)
+                        queue.add(mutableListOf(next, cur[1]+1))
+                    }
+                }
+            }
+        }
+    }
+    println(friendMap.toList().filter { it.second == friendMap.values.minOrNull() }.sortedBy { it.first }[0].first)
+}

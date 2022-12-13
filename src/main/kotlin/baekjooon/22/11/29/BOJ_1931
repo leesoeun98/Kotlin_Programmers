@@ -1,0 +1,28 @@
+// 12분 소요, 혼자 풀었으나 예전 기억 떠올림 (3회차 성공)
+// 1회차 - >= 안함
+// 2회차 - sort 기준 누락
+// 회의 종료 시간 기준 sort 한 후, 현재 끝난 시간이 다음 회의 시작 시간보다 작으면 가능
+import java.io.*
+val br = BufferedReader(InputStreamReader(System.`in`))
+
+fun main(){
+    val meetingList = mutableListOf<MutableList<Int>>()
+
+    for(i in 0 until br.readLine().toInt()){
+        val (start, end) = br.readLine().split(' ').map{it.toInt()}
+        meetingList.add(mutableListOf(start, end))
+    }
+    // 종료 시간을 오름차순으로 정렬 + 시작 시간으로도 정렬
+    meetingList.sortWith(compareBy ({ it[1] }, {it[0]}))
+
+    var count = 0
+    var endTime = 0
+
+    for(meeting in meetingList){
+        if(meeting[0]>=endTime){
+            endTime=meeting[1]
+            count+=1
+        }
+    }
+    println(count)
+}

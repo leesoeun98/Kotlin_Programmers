@@ -1,0 +1,34 @@
+// 45분 소요, 이전 코드 봄 (5회차 성공)
+// 1회차 실패 - 재귀는 시간초과 남 => bfs로 각 단계별 x, depth를 map에 저장 (메모리 초과)
+// 2회차 실패 - map을 없애고 depth만 전 단계꺼 저장해서 +1 하는 식으로 구함 (메모리 초과)
+// 3회차 - 메모리 초과 안나게 isVisited로 한 번 방문한데는 안가게 (index Exception 남)
+// 4회차 - 틀림 (이동 중에 10만을 넘어갈 수 있음)
+// 5회차 성공 - python 이전 코드 봄
+// -> 문제점: 1. 대강 어떻게 구현 할지는 알았고 어떤 유형인지 까지 알았으나 디테일한 구현에서 계속 틀림
+
+import java.io.*
+import java.util.*
+
+val br = BufferedReader(InputStreamReader(System.`in`))
+
+fun main(){
+    val (n, k) = br.readLine()!!.split(' ').map{it.toInt()}
+    val queue : Queue<Int> = LinkedList()
+    val distance = MutableList(100001){0}
+    queue.add(n)
+
+    while(queue.isNotEmpty()) {
+        val x = queue.poll()
+
+        if (x == k) {
+            println(distance[x])
+            break
+        }
+        for (next in listOf(x - 1, x + 1, x * 2)) {
+            if (next in 0..100000 && distance[next] == 0) {
+                distance[next] = distance[x] + 1
+                queue.add(next)
+            }
+        }
+    }
+}
